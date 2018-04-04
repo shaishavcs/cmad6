@@ -2,11 +2,9 @@ package com.cmad.essentials.blogger.api;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Reference;
 
 @Entity
 public class BlogCategory {
@@ -14,10 +12,9 @@ public class BlogCategory {
 	@Id
 	private Long id;
 
-	@Enumerated
 	private BlogCategoryType blogCategoryType;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@Reference
 	private List<User> followers;
 
 	public List<User> getFollowers() {

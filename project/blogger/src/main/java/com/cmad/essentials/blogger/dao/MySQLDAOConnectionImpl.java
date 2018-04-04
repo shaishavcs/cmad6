@@ -1,9 +1,8 @@
 package com.cmad.essentials.blogger.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class MySQLDAOConnectionImpl implements DAOConnection {
 
 	@Autowired

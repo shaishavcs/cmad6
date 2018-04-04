@@ -1,22 +1,21 @@
 package com.cmad.essentials.blogger.api;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Reference;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Likes {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+
 	private String userId;
-	@ManyToOne
-	@JsonBackReference
+
+	@Reference
+	@JsonIgnore
 	private Blog blog;
 
 	/*

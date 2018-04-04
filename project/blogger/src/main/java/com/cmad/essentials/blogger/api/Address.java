@@ -1,15 +1,12 @@
 package com.cmad.essentials.blogger.api;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
 
 @Entity
 public class Address {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	private String streetAddress;
 	private String city;

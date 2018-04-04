@@ -2,24 +2,24 @@ package com.cmad.essentials.blogger.api;
 
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Reference;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Comment {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	@ManyToOne
-	@JsonBackReference
+
+	@Reference
+	@JsonIgnore
 	private Blog blog;
 	private String commentContent;
-	private String commentedBy; // userId
+
+	@Reference
+	private User commentedBy; // userId
 	private Date postedDate;
 
 	public Long getId() {
@@ -38,11 +38,11 @@ public class Comment {
 		this.commentContent = commentContent;
 	}
 
-	public String getCommentedBy() {
+	public User getCommentedBy() {
 		return commentedBy;
 	}
 
-	public void setCommentedBy(String commentedBy) {
+	public void setCommentedBy(User commentedBy) {
 		this.commentedBy = commentedBy;
 	}
 

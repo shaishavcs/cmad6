@@ -1,19 +1,19 @@
 package com.cmad.essentials.blogger.security;
 
 public class Authentication {
-	String userName;
+	String username;
 	String password;
 
 	public Authentication() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUsername(String userName) {
+		this.username = userName;
 	}
 
 	public String getPassword() {

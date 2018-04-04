@@ -4,34 +4,33 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import org.mongodb.morphia.annotations.Embedded;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Reference;
 
 @Entity
 public class Blog {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	private String title;
-	@Lob
+
 	private String blogContent;
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "blog", orphanRemoval = true)
+
+	@Reference
 	private List<Likes> likes = new ArrayList<>();
-	@OneToOne
+
+	@Embedded
 	private User author;
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "blog", orphanRemoval = true)
+
+	@Reference
 	private List<Comment> comments = new ArrayList<>();
+
 	private Date createdDate;
 	private Date modifiedDate;
-	@OneToOne
+
+	@Reference
 	private BlogCategory blogCategory;
 
 	public List<Likes> getLikes() {
@@ -127,4 +126,5 @@ public class Blog {
 	public void setBlogCategory(BlogCategory blogCategory) {
 		this.blogCategory = blogCategory;
 	}
+
 }

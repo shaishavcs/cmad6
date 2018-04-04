@@ -2,6 +2,8 @@ package com.cmad.essentials.blogger.dao;
 
 import java.util.List;
 
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.dao.BasicDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -9,12 +11,21 @@ import com.cmad.essentials.blogger.api.User;
 import com.cmad.essentials.blogger.api.UserAlreadyExistsException;
 import com.cmad.essentials.blogger.api.UserException;
 import com.cmad.essentials.blogger.api.UserNotFoundException;
+import com.cmad.essentials.blogger.dao.sequence.SequenceGeneratorService;
 
 @Component
-public class UserDAOImpl implements UserDAO {
+public class UserDAOImpl extends BasicDAO<User, String> implements UserDAO {
+
+	public UserDAOImpl(Datastore ds) {
+		super(User.class, ds);
+		// TODO Auto-generated constructor stub
+	}
 
 	@Autowired
 	DAOConnectionRepository daoConnectionRepository;
+
+	@Autowired
+	SequenceGeneratorService sequenceGeneratorService;
 
 	@Override
 	public User getUserByEmailId(String emailId) {
@@ -29,13 +40,14 @@ public class UserDAOImpl implements UserDAO {
 	public User getUserByUserId(String userId) {
 		// TODO Auto-generated method stub
 		Connection connection = daoConnectionRepository.getConnection().create();
-		List<User> users = (List<User>) connection
-				.query("from " + User.class.getName() + " user where user.userId=:userId", "userId", userId);
-		daoConnectionRepository.getConnection().close(connection);
-		if (users.isEmpty()) {
-			throw new UserNotFoundException();
-		}
-		return users.get(0);
+		User user = (User) connection.get(User.class, userId);
+		//		List<User> users = (List<User>) connection
+		//				.query("from " + User.class.getName() + " user where user.userId=:userId", "userId", userId);
+		//		daoConnectionRepository.getConnection().close(connection);
+		//		if (users.isEmpty()) {
+		//			throw new UserNotFoundException();
+		//		}
+		return user;
 	}
 
 	@Override
@@ -66,8 +78,8 @@ public class UserDAOImpl implements UserDAO {
 		getUserByUserId(user.getUserId());
 		Connection connection = daoConnectionRepository.getConnection().create();
 		// User userFound = (User) connection.get(User.class, user.getUserName());
-		User mergedUser = (User) connection.merge(user);
-		connection.commit();
+		User mergedUser = new User(user);
+		connection.persist(mergedUser);
 		daoConnectionRepository.getConnection().close(connection);
 		return mergedUser.getUserId();
 	}

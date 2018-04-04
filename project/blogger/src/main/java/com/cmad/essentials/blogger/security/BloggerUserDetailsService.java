@@ -18,11 +18,37 @@ public class BloggerUserDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
-		User user = bloggerUserReporitory.findOne(userName);
+		User user = bloggerUserReporitory.findUser(userName);
 		if (user == null) {
 			throw new UsernameNotFoundException(userName);
 		}
 		return new BloggerUserDetails(user);
+		/*
+		 * MongoDatabase database = mongoClient.getDatabase("springsecurity");
+		 * 
+		 * MongoCollection<Document> collection = database.getCollection("users");
+		 * 
+		 * Document document = collection.find(Filters.eq("email", email)).first();
+		 * 
+		 * if (document != null) {
+		 * 
+		 * String name = document.getString("name");
+		 * 
+		 * String surname = document.getString("surname");
+		 * 
+		 * String password = document.getString("password");
+		 * 
+		 * List<String> authorities = (List<String>) document.get("authorities");
+		 * 
+		 * MongoUserDetails mongoUserDetails = new MongoUserDetails(email, password,
+		 * authorities.toArray(new String[authorities.size()]));
+		 * 
+		 * return mongoUserDetails;
+		 * 
+		 * }
+		 * 
+		 * return null;
+		 */
 	}
 
 }

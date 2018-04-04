@@ -1,63 +1,60 @@
 package com.cmad.essentials.blogger.config;
 
-import java.beans.PropertyVetoException;
-
-import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Morphia;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.mongo.MongoProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.JpaVendorAdapter;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import com.mongodb.MongoClient;
 
 @Configuration
-@EnableTransactionManagement
-@EnableJpaRepositories(basePackages = "com.cmad.essentials.blogger")
 public class DatasourceConfig {
 
-	@Value("${spring.datasource.driver-class-name}")
-	private String datasourceDriverClass;
-	@Value("${spring.datasource.url}")
-	private String datasourceUrl;
-	@Value("${spring.datasource.username}")
-	private String datasourceUser;
-	@Value("${spring.datasource.password}")
-	private String datasourcePassword;
+	@Autowired
+	private MongoProperties mongoProperties;
 
-	@Bean
-	public DataSource datasource() throws PropertyVetoException {
-		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		dataSource.setDriverClassName(datasourceDriverClass);
-		dataSource.setUrl(datasourceUrl);
-		dataSource.setUsername(datasourceUser);
-		dataSource.setPassword(datasourcePassword);
+	private Morphia morphia() {
+		final Morphia morphia = new Morphia();
+		// tell Morphia where to find your classes
+		// can be called multiple times with different packages or classes
+		morphia.mapPackage("com.cmad.essentials.blogger");
 
-		return dataSource;
+		return morphia;
 	}
 
 	@Bean
-	public LocalContainerEntityManagerFactoryBean entityManagerFactory(@Qualifier("datasource") DataSource datasource)
-			throws PropertyVetoException {
-		LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
-		entityManagerFactory.setDataSource(datasource);
-		entityManagerFactory.setPackagesToScan(new String[] { "com.cmad.essentials.blogger" });
-		JpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
-		entityManagerFactory.setJpaVendorAdapter(jpaVendorAdapter);
-		return entityManagerFactory;
-	}
+	public Datastore datastore(MongoClient mongoClient) {
+		// create the Datastore connecting to the default port on the local host
+		final Datastore datastore = morphia().createDatastore(mongoClient, mongoProperties.getDatabase());
+		datastore.ensureIndexes();
 
-	@Bean
-	public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
-		JpaTransactionManager transactionManager = new JpaTransactionManager();
-		transactionManager.setEntityManagerFactory(entityManagerFactory);
-		return transactionManager;
+		return datastore;
 	}
-}
+	/*
+	 * @Bean public DataSource datasource() throws PropertyVetoException {
+	 * DriverManagerDataSource dataSource = new DriverManagerDataSource();
+	 * dataSource.setDriverClassName(datasourceDriverClass);
+	 * dataSource.setUrl(datasourceUrl); dataSource.setUsername(datasourceUser);
+	 * dataSource.setPassword(datasourcePassword);
+	 * 
+	 * return dataSource; }
+	 * 
+	 * @Bean public LocalContainerEntityManagerFactoryBean
+	 * entityManagerFactory(@Qualifier("datasource") DataSource datasource) throws
+	 * PropertyVetoException { LocalContainerEntityManagerFactoryBean
+	 * entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
+	 * entityManagerFactory.setDataSource(datasource);
+	 * entityManagerFactory.setPackagesToScan(new String[] {
+	 * "com.cmad.essentials.blogger" }); JpaVendorAdapter jpaVendorAdapter = new
+	 * HibernateJpaVendorAdapter();
+	 * entityManagerFactory.setJpaVendorAdapter(jpaVendorAdapter); return
+	 * entityManagerFactory; }
+	 * 
+	 * @Bean public PlatformTransactionManager
+	 * transactionManager(EntityManagerFactory entityManagerFactory) {
+	 * JpaTransactionManager transactionManager = new JpaTransactionManager();
+	 * transactionManager.setEntityManagerFactory(entityManagerFactory); return
+	 * transactionManager; }
+	 */}

@@ -1,10 +1,8 @@
 package com.cmad.essentials.blogger.api;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import org.mongodb.morphia.annotations.Embedded;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
 
 @Entity
 public class User {
@@ -18,11 +16,15 @@ public class User {
 	private Long phoneNumber;
 	private String alternateEmailId;
 	private String password;
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@Embedded
 	private Address address;
 	private String company;
 
 	public User() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public User(String userId) {
 		// TODO Auto-generated constructor stub
 	}
 
