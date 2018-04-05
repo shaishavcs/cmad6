@@ -8,7 +8,7 @@ public class ClientController {
 
 	@GetMapping("/")
 	public String index() {
-		return "index.html";
+		return "blogger.html";
 	}
 
 }
