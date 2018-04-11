@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cmad.essentials.blogger.api.Blog;
 import com.cmad.essentials.blogger.api.User;
 import com.cmad.essentials.blogger.security.Authentication;
+import com.cmad.essentials.blogger.security.JwtService;
 import com.cmad.essentials.blogger.service.BlogService;
 import com.cmad.essentials.blogger.service.UserService;
 
@@ -38,6 +39,9 @@ public class UserResource {
 	@Autowired
 	BlogService blogService;
 
+	@Autowired
+	JwtService jwtService;
+
 	@PostMapping("/register")
 	public ResponseEntity<User> register(@RequestBody User user) {
 		// register the user with the site
@@ -46,16 +50,23 @@ public class UserResource {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<User> login(@RequestBody Authentication authentication) {
+	public ResponseEntity<UserResourceResponse> login(@RequestBody Authentication authentication) {
 		String userId = authentication.getUsername();
 		String password = authentication.getPassword();
 		//		String userId = httpHeaders.getRequestHeader("userId").get(0);
 		//		String password = httpHeaders.getRequestHeader("password").get(0);
 		boolean isSuccessful = userService.login(userId, password);
 		if (!isSuccessful) {
-			return new ResponseEntity<User>(HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<UserResourceResponse>(HttpStatus.UNAUTHORIZED);
 		}
-		return new ResponseEntity<User>(userService.getUser(userId), HttpStatus.OK);
+		User user = userService.getUser(userId);
+		String token = jwtService.getToken(authentication);
+		UserResourceResponse userResourceResponse = new UserResourceResponse();
+		userResourceResponse.setUser(user);
+		userResourceResponse.setToken(token);
+		ResponseEntity<UserResourceResponse> responseEntity = new ResponseEntity<UserResourceResponse>(
+				userResourceResponse, HttpStatus.OK);
+		return responseEntity;
 	}
 
 	@PutMapping("/update/{userId}")

@@ -19,6 +19,7 @@ public class User {
 	@Embedded
 	private Address address;
 	private String company;
+	private String token;
 
 	public User() {
 		// TODO Auto-generated constructor stub
@@ -119,6 +120,14 @@ public class User {
 
 	public void setCompany(String company) {
 		this.company = company;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 
 }

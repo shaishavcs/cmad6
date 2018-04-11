@@ -66,6 +66,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
 		// TODO Auto-generated method stub
+		security.allowFormAuthenticationForClients();
 		security.passwordEncoder(bloggerPasswordEncoder);
 	}
 }

@@ -102,4 +102,14 @@ public class UserDAOImpl extends BasicDAO<User, String> implements UserDAO {
 		// TODO Auto-generated method stub
 	}
 
+	@Override
+	public String getEncryptedStoredPassword(String userName) {
+		Connection connection = daoConnectionRepository.getConnection().create();
+		User userFound = (User) connection.get(User.class, userName);
+		if (userFound != null) {
+			return userFound.getPassword();
+		}
+		return null;
+	}
+
 }

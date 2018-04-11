@@ -19,8 +19,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean login(String userName, String password) {
 		// TODO Auto-generated method stub
-		String encryptedPassword = passwordEncoder.encode(password);
-		return userDAO.authenticate(userName, encryptedPassword);
+		//		String encryptedPassword = passwordEncoder.encode(password);
+		String storedEncryptedPassword = userDAO.getEncryptedStoredPassword(userName);
+		//		return userDAO.authenticate(userName, encryptedPassword);
+		return passwordEncoder.matches(password, storedEncryptedPassword);
 	}
 
 	@Override

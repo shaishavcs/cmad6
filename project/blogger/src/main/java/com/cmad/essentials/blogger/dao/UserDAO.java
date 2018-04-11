@@ -17,4 +17,6 @@ public interface UserDAO {
 	Boolean authenticate(String userName, String password);
 
 	String update(User user);
+
+	String getEncryptedStoredPassword(String userName);
 }
