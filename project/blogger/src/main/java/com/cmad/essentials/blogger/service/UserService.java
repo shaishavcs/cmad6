@@ -1,6 +1,7 @@
 package com.cmad.essentials.blogger.service;
 
 import com.cmad.essentials.blogger.api.User;
+import com.cmad.essentials.blogger.rest.ChangePassword;
 
 public interface UserService {
 
@@ -11,5 +12,7 @@ public interface UserService {
 	public void update(User user);
 
 	public User getUser(String userName);
+
+	public User changePassword(String userId, ChangePassword changePassword);
 
 }

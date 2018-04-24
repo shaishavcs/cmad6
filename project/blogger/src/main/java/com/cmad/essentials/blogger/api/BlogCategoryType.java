@@ -3,7 +3,7 @@ package com.cmad.essentials.blogger.api;
 public enum BlogCategoryType {
 
 	ALL("All"), POLITICAL("Political"), LIFE_SCIENCE("Life Science"), TRAVEL("Travel"), FOOD("Food"), TECHNICAL(
-			"Technical"), PERSONAL_CARE("Personal Care"), SPORTS("Sports");
+			"Technical"), PERSONAL_CARE("Personal Care"), SPORTS("Sports"), OTHER("Other");
 
 	private String blogCategory;
 
@@ -11,7 +11,7 @@ public enum BlogCategoryType {
 		this.blogCategory = blogCategory;
 	}
 
-	public BlogCategoryType getEnum(String blogCatrgory) {
+	public static BlogCategoryType getEnum(String blogCategory) {
 		BlogCategoryType blogCategoryType = BlogCategoryType.ALL;
 		if ("Political".equalsIgnoreCase(blogCategory)) {
 			blogCategoryType = BlogCategoryType.POLITICAL;
@@ -29,5 +29,10 @@ public enum BlogCategoryType {
 			blogCategoryType = BlogCategoryType.SPORTS;
 		}
 		return blogCategoryType;
+	}
+
+	@Override
+	public String toString() {
+		return blogCategory;
 	}
 }

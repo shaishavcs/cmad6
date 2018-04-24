@@ -1,12 +1,12 @@
 package com.cmad.essentials.blogger.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.cmad.essentials.blogger.api.Blog;
+import com.cmad.essentials.blogger.api.BlogCategoryType;
 import com.cmad.essentials.blogger.api.Comment;
 import com.cmad.essentials.blogger.api.Likes;
 import com.cmad.essentials.blogger.api.SearchCriteria;
@@ -34,20 +34,33 @@ public class BlogServiceImpl implements BlogService {
 	@Override
 	public List<Blog> searchBlogs(SearchCriteria searchCriteria) {
 		// TODO Auto-generated method stub
-		List<Blog> blogsFound = new ArrayList<>();
-		List<Blog> blogList = blogRepository.listAll();
-		for (Blog blog : blogList) {
-			if (searchCriteria.getSearchType().equalsIgnoreCase("Title")) {
-				if (blog.getTitle().contains(searchCriteria.getSearchString())) {
-					blogsFound.add(blog);
-				}
-			} else if (searchCriteria.getSearchType().equalsIgnoreCase("Content")) {
-				if (blog.getBlogContent().contains(searchCriteria.getSearchString())) {
-					blogsFound.add(blog);
-				}
-			}
+		boolean searchAll = false;
+		if (searchCriteria.getBlogCategoryType().equals(BlogCategoryType.ALL)) {
+			searchAll = true;
 		}
-
+		List<Blog> blogsFound = blogRepository.findByCriteria(searchCriteria, searchAll);
+		/*		List<Blog> blogList = blogRepository.listAll();
+				for (Blog blog : blogList) {
+					if (searchCriteria.getSearchType().equalsIgnoreCase("Title")) {
+						if (blog.getTitle().contains(searchCriteria.getSearchString())
+								&& blog.getBlogCategory().getBlogCategoryType().equals(searchCriteria.getBlogCategoryType())) {
+							blogsFound.add(blog);
+						}
+					} else if (searchCriteria.getSearchType().equalsIgnoreCase("Content")) {
+						if (blog.getBlogContent().contains(searchCriteria.getSearchString())
+								&& blog.getBlogCategory().getBlogCategoryType().equals(searchCriteria.getBlogCategoryType())) {
+							blogsFound.add(blog);
+						}
+					} else if (searchCriteria.getSearchType().equalsIgnoreCase("Author")) { // based on the author
+						if ((blog.getAuthor().getUserId().contains(searchCriteria.getSearchString())
+								|| blog.getAuthor().getFirstName().contains(searchCriteria.getSearchString())
+								|| blog.getAuthor().getLastName().contains(searchCriteria.getSearchString()))
+								&& blog.getBlogCategory().getBlogCategoryType().equals(searchCriteria.getBlogCategoryType())) {
+							blogsFound.add(blog);
+						}
+					}
+				}
+		*/
 		return blogsFound;
 	}
 

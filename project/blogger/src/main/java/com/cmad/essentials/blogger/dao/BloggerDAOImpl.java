@@ -1,5 +1,6 @@
 package com.cmad.essentials.blogger.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.mongodb.morphia.Datastore;
@@ -9,9 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.cmad.essentials.blogger.api.Blog;
+import com.cmad.essentials.blogger.api.BlogCategory;
 import com.cmad.essentials.blogger.api.BlogNotFoundException;
 import com.cmad.essentials.blogger.api.Comment;
 import com.cmad.essentials.blogger.api.Likes;
+import com.cmad.essentials.blogger.api.SearchCriteria;
 import com.cmad.essentials.blogger.api.User;
 import com.cmad.essentials.blogger.dao.sequence.SequenceGeneratorService;
 
@@ -142,6 +145,56 @@ public class BloggerDAOImpl extends BasicDAO<Blog, Long> implements BloggerDAO {
 		blog.addLike(like);
 		connection.persist(blog);
 		daoConnectionRepository.getConnection().close(connection);
+	}
+
+	@Override
+	public List<Blog> findByCriteria(SearchCriteria searchCriteria, boolean searchAll) {
+		List<Blog> blogs = new ArrayList<>();
+		Connection connection = daoConnectionRepository.getConnection().create();
+		Datastore datastore = connection.getDatastore();
+		Query<Blog> query;
+		if (searchAll) {
+			switch (searchCriteria.getSearchType()) {
+			case TITLE:
+			case CONTENT:
+				query = (Query<Blog>) datastore.createQuery(Blog.class).field(searchCriteria.getSearchType().toString())
+						.containsIgnoreCase(searchCriteria.getSearchString());
+				break;
+			case AUTHOR:
+				query = (Query<Blog>) datastore.createQuery(Blog.class).disableValidation().field("author.userId")
+						.containsIgnoreCase(searchCriteria.getSearchString());
+				break;
+			default:
+				query = (Query<Blog>) datastore.createQuery(Blog.class).field(searchCriteria.getSearchType().toString())
+						.containsIgnoreCase(searchCriteria.getSearchString());
+				break;
+			}
+
+		} else {// It has specific Blog Categories
+			List<BlogCategory> blogCats = ((Query<BlogCategory>) datastore.createQuery(BlogCategory.class))
+					.field("blogCategoryType").equal(searchCriteria.getBlogCategoryType()).asList();
+
+			switch (searchCriteria.getSearchType()) {
+			case TITLE:
+			case CONTENT:
+				query = (Query<Blog>) datastore.createQuery(Blog.class).disableValidation()
+						.field(searchCriteria.getSearchType().toString())
+						.containsIgnoreCase(searchCriteria.getSearchString()).field("blogCategory.blogCategoryType")
+						.containsIgnoreCase((searchCriteria.getBlogCategoryType().toString()));
+				break;
+			case AUTHOR:
+				query = (Query<Blog>) datastore.createQuery(Blog.class).disableValidation().field("author.userId")
+						.containsIgnoreCase(searchCriteria.getSearchString()).field("blogCategory").in(blogCats);
+				break;
+			default:
+				query = (Query<Blog>) datastore.createQuery(Blog.class).field(searchCriteria.getSearchType().toString())
+						.containsIgnoreCase(searchCriteria.getSearchString());
+				break;
+			}
+		}
+		blogs = query.asList();
+		daoConnectionRepository.getConnection().close(connection);
+		return blogs;
 	}
 
 }

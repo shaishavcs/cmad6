@@ -5,6 +5,7 @@ import java.util.List;
 import com.cmad.essentials.blogger.api.Blog;
 import com.cmad.essentials.blogger.api.Comment;
 import com.cmad.essentials.blogger.api.Likes;
+import com.cmad.essentials.blogger.api.SearchCriteria;
 import com.cmad.essentials.blogger.api.User;
 
 public interface BloggerDAO {
@@ -34,6 +35,8 @@ public interface BloggerDAO {
 	void addComment(Comment comment, Long blogId);
 
 	public void addLike(Likes like, Long blogId);
+
+	public List<Blog> findByCriteria(SearchCriteria searchCriteria, boolean searchAll);
 
 	// public List<Blog> find(SearchCriteria searchCriteria);
 }

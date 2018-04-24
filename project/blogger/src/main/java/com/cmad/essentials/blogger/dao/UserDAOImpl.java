@@ -65,7 +65,7 @@ public class UserDAOImpl extends BasicDAO<User, String> implements UserDAO {
 		User userFound = (User) connection.get(User.class, user.getUserId());
 		if (userFound != null) {
 			daoConnectionRepository.getConnection().close(connection);
-			throw new UserAlreadyExistsException();
+			throw new UserAlreadyExistsException("User " + user.getUserId() + " already exists.");
 		} else {
 			connection.persist(user);
 		}
@@ -91,11 +91,11 @@ public class UserDAOImpl extends BasicDAO<User, String> implements UserDAO {
 		if (userFound != null) {
 			if (!userFound.getPassword().equals(password)) {
 				daoConnectionRepository.getConnection().close(connection);
-				throw new UserException();
+				throw new UserException("User " + userName + " authentication failed. Passwords do not match.");
 			}
 		} else {
 			daoConnectionRepository.getConnection().close(connection);
-			throw new UserNotFoundException();
+			throw new UserNotFoundException("User " + userName + " does not exist.");
 		}
 		daoConnectionRepository.getConnection().close(connection);
 		return true;

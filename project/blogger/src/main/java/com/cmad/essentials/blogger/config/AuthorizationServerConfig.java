@@ -37,6 +37,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Value("${security.jwt.resource-ids}")
 	private String resourceIds;
 
+	@Value("${security.signing-key}")
+	private String signingKey;
+
 	@Autowired
 	private TokenStore tokenStore;
 
@@ -52,7 +55,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Override
 	public void configure(ClientDetailsServiceConfigurer configurer) throws Exception {
 		configurer.inMemory().withClient(clientId).secret(clientSecret).accessTokenValiditySeconds(3600)
-				.authorizedGrantTypes(grantType).scopes(scopeRead, scopeWrite).resourceIds(resourceIds);
+				.authorizedGrantTypes(grantType, "refresh_token", "authorization_code").scopes(scopeRead, scopeWrite)
+				.resourceIds(resourceIds);
 	}
 
 	@Override
@@ -68,5 +72,26 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		// TODO Auto-generated method stub
 		security.allowFormAuthenticationForClients();
 		security.passwordEncoder(bloggerPasswordEncoder);
+		security.tokenKeyAccess("permitAll()").addTokenEndpointAuthenticationFilter(new BloggerCorsFilter());
+		//		security.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()")
+		//				.addTokenEndpointAuthenticationFilter(new BloggerCorsFilter());
 	}
+
+	//	@Override
+	//	public void addCorsMappings(CorsRegistry registry) {
+	//		registry.addMapping("/**");
+	//	}
+
+	//	@Bean
+	//	public JwtAccessTokenConverter accessTokenConverter() {
+	//		JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+	//		converter.setVerifierKey(signingKey);
+	//		return converter;
+	//	}
+
+	//	@Bean
+	//	public JwtTokenStore tokenStore() {
+	//		return new JwtTokenStore(accessTokenConverter);
+	//	}
+
 }

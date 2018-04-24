@@ -27,6 +27,7 @@ public class User {
 
 	public User(String userId) {
 		// TODO Auto-generated constructor stub
+		this.userId = userId;
 	}
 
 	public User(User user) {

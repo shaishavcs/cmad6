@@ -3,9 +3,11 @@ package com.cmad.essentials.blogger.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.cmad.essentials.blogger.api.CurrentPasswordDoesNotMatchException;
 import com.cmad.essentials.blogger.api.User;
 import com.cmad.essentials.blogger.config.BloggerPasswordEncoder;
 import com.cmad.essentials.blogger.dao.UserDAO;
+import com.cmad.essentials.blogger.rest.ChangePassword;
 
 @Component
 public class UserServiceImpl implements UserService {
@@ -58,6 +60,20 @@ public class UserServiceImpl implements UserService {
 	public User getUser(String userName) {
 		// TODO Auto-generated method stub
 		return userDAO.getUserByUserId(userName);
+	}
+
+	@Override
+	public User changePassword(String userId, ChangePassword changePassword) {
+		// TODO Auto-generated method stub
+		User user = userDAO.getUserByUserId(userId);
+		// get the existing password and compare with currentPassword
+		boolean matches = this.passwordEncoder.matches(changePassword.getCurrentPassword(), user.getPassword());
+		if (!matches) {
+			throw new CurrentPasswordDoesNotMatchException("Current password and existing password do not match");
+		}
+		user.setPassword(passwordEncoder.encode(changePassword.getNewPassword()));
+		userDAO.update(user);
+		return user;
 	}
 
 }
