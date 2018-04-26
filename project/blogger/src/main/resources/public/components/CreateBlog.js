@@ -3,22 +3,15 @@ import store from '../store/blogger_store.js';
 import { createBlog } from '../actions/Actions.js';
 import LoadingView from './LoadingView.js';
 import { Redirect } from 'react-router-dom';
-// import { BlogEditorComponent } from "./BlogEditorComponent.js";
-import SimpleMDE  from 'react-simplemde-editor';
-import {Editor, EditorState} from 'draft-js';
-import ReactSimpleMDE from 'react-simplemde';
-// import { BlogEditorComponent } from './BlogEditorComponent.js';
-import ReactMDE from 'react-mde';
-import DraftRichEditor from './DraftRichEditor.js';
-import DraftColorEditor from './DraftColorEditor.jsx';
-import BlogEditor from './BlogEditor.js';
-import MegadraftBlogEditor from './MegadraftBlogEditor.js';
-import DraftEditor from './DraftEditor.js';
+// import {Editor, EditorState} from 'draft-js';
+// import DraftRichEditor from './DraftRichEditor.js';
+// import DraftColorEditor from './DraftColorEditor.jsx';
+// import BlogEditor from './BlogEditor.js';
+// import MegadraftBlogEditor from './MegadraftBlogEditor.js';
 
 class CreateBlog extends React.Component {
     constructor(props) {
         super(props);
-        console.log('Creating the Blog....'+JSON.stringify(props));
         const { match : {params}} = this.props;
             this.state = {
                 id: params.id,
@@ -33,8 +26,7 @@ class CreateBlog extends React.Component {
                     createdDate: {},
                     comments: [],
                     modifiedDate: {}
-                },
-                editorState: EditorState.createEmpty()
+                }
             };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onChangeContent = this.onChangeContent.bind(this);
@@ -53,8 +45,6 @@ class CreateBlog extends React.Component {
         });
     }
     handleSubmit(blogContent) {
-        // console.log('Submit Blog: raw content of BlogEditor:?:'+JSON.stringify(blogContent));
-        // console.log('Submitting Blog create request....state.blog?::: '+JSON.stringify(this.state.blog));
         const creationDate = new Date();
         let blog = this.state.blog;
         blog.createdDate = creationDate.getTime();
@@ -62,17 +52,13 @@ class CreateBlog extends React.Component {
         console.log('Submitting Blog create request....state.blog?::: '+JSON.stringify(blog));
         createBlog(blog);
     }
-    onDraftSubmit() {
-        // do nothing basically
-    }
     render () {
-        console.log('store.getState():'+JSON.stringify(store.getState()));
         let errorToDisplay = '<h6 style={{\'color\': \'red\'}}>{errorToDisplay}</h6>';
         let isThereError = false;
         if (store.getState().user && store.getState().user.user && store.getState().auth && store.getState().auth.auth && store.getState().auth.auth.token) {
-            console.log('CreateBlog: checking auth.auth.loginSuccessful...');
+//            console.log('CreateBlog: checking auth.auth.loginSuccessful...');
             if (store.getState().auth.auth.loginSuccessful === false) {
-                console.log('CreateBlog: login failed... redirescting to login...');
+//                console.log('CreateBlog: login failed... redirescting to login...');
                 return (<Redirect to='/login'/>)
             }
         } else if ((store.getState().user.user === undefined && store.getState().auth.auth === undefined ) || store.getState().auth.auth.loginSuccessful === false) {
@@ -85,8 +71,6 @@ class CreateBlog extends React.Component {
             errorToDisplay = '<h6 style={{\'color\': \'red\'}}>Unable to Create Blog. Report issue to the <a href=mailto:ssabapar@cisco.com> site creater</a></h6>';
             isThereError = true;
         }
-        // const hrefForCollapsiblePanel = "#"+this.props.blog.id;
-        // const collapsiblePanelId = this.props.blog.id;
         console.log('createBlog: render: isThereError?'+JSON.stringify(isThereError));
         return (
             <div className='row'>
@@ -129,7 +113,6 @@ class CreateBlog extends React.Component {
                             </div>
                             <div className="col-lg-6">
                                 <select className="form-control" id="blogCategory" name="blogCategoryType"  onChange={this.onChangeContent}>
-                                    {/* <option name="All" value="ALL">All</option> */}
                                     <option name="Personal Care" value="PERSONAL_CARE">Personal Care</option>
                                     <option name="Life Science" value="LIFE_SCIENCES">Life Science</option>
                                     <option name="Travel" value="TRAVEL">Travel</option>
@@ -137,6 +120,7 @@ class CreateBlog extends React.Component {
                                     <option name="Political" value="POLITICAL">Political</option>
                                     <option name="Sports" value="SPORTS">Sports</option>
                                     <option name="Technical" value="TECHNICAL">Technical</option>
+                                    <option name="Other" value="TECHNICAL">Other</option>
                                 </select>
                             </div>
                         </div>

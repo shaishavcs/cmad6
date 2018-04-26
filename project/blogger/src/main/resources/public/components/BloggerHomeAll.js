@@ -7,7 +7,6 @@ import * as BloggerActions from '../actions/Actions.js';
 import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
 import { NavLink } from 'react-router-dom';
-// import { NavLinkButton } from '../widgets/NavLinkButton.js';
 
 class BloggerHomeAll extends React.Component {
     constructor(props) {
@@ -19,16 +18,12 @@ class BloggerHomeAll extends React.Component {
                 blogCategory: "All"
             }
         }
-        // alert('BloggerHomeAll: props;'+JSON.stringify(props));
         this.onChange = this.onChange.bind(this);
         this.submit = this.submit.bind(this);
     }
 
     onChange(event) {
         this.state.searchCriteria[event.target.name] = event.target.value;
-        // this.setState({
-        //     searchCriteria: this.state.searchCriteria
-        // })
     }
 
     submit() {
@@ -38,12 +33,10 @@ class BloggerHomeAll extends React.Component {
     }
 
     componentDidMount() {
-        // store.subscribe( () => this.forceUpdate() );
         const currState = store.getState();
         fetchBlogsFromServer();
     }
     render() {
-        // alert('BloggerHomeAll: props;'+JSON.stringify(this.props));
         return (
 			<div className="col-xs-12 col-lg-12">
 
@@ -95,7 +88,6 @@ class BloggerHomeAll extends React.Component {
                         </div>
                     </div>
                 </div>
-                {/* style={{backgroundColor: 'lightblue'}} */}
                 <div className="container-fluid panel" >
                     <div className="row">
                         <div id="addBlogDivId">
@@ -104,13 +96,6 @@ class BloggerHomeAll extends React.Component {
                                 </div>
                                 <div className="col-lg-2" >
                                     <NavLink to={`/blog/create`} ><button className="btn-sm btn-primary" id="createBlogBtn">Create Blog Now !</button></NavLink>
-
-                                    {/* <button className="btn-sm btn-primary" id="createBlogBtn" onClick={()=> {this.props.history.replace('/blog/create')}}>
-                                        Create Blog Now!
-                                    </button> */}
-                                    {/* <NavLinkButton /> */}
-                                {/* <button className="btn btn-success" as={NavLink} to={`/blog/create`}  style={{backgroundColor: 'dodgerblue'}}>Create a Blog Now! </button> */}
-                                {/* <NavLink to={`/blog/create`}>Create Blog</NavLink> */}
                             </div>
                         </div>
                     </div>
@@ -139,39 +124,22 @@ class BloggerHomeAll extends React.Component {
         );
     }
 };
-    // const BlogView  = (props) =>  {
-    //     // alert('BlogView:props:'+JSON.stringify(props));
-    //     var blogRow = this.props.blogRow;
-    //     var rowArray = $.map(blogRow, function(value, index){
-    //        return [value];
-    //     });
 
-    //     return(
-    //             <div key={blogRow}>
-    //                 {rowArray.map(function(tableItem, i){
-    //                     // alert('tableItem:'+JSON.stringify(tableItem[i]));
-    //                     return <div key={i} className='col-xs-12 col-lg-12'>{tableItem}</div>
-    //                 })}
-    //             </div>
-    //     );
-    // };
-
-    function mapStateToProps(state) {
-        // alert('Blogger:mapStateToProps:state.blogs: '+JSON.stringify(state.blogs));
-        return state.blogs;
-        
-    }
+function mapStateToProps(state) {
+    return state.blogs;
+    
+}
+    
+    
+function mapDispatchToProps(dispatch) {
+    return {
+        actions: bindActionCreators({
+            fetchBlogsFromServer, fetchBlogsForUserFromServer,
+            push,
+        }, dispatch),
+    };
+}
       
       
-    function mapDispatchToProps(dispatch) {
-        return {
-            actions: bindActionCreators({
-                fetchBlogsFromServer, fetchBlogsForUserFromServer,
-                push,
-            }, dispatch),
-        };
-    }
-      
-      
-    export default connect(mapStateToProps, mapDispatchToProps)(BloggerHomeAll);
+export default connect(mapStateToProps, mapDispatchToProps)(BloggerHomeAll);
     

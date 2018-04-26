@@ -10,7 +10,6 @@ import LoadingView from './LoadingView.js';
 class ViewBlog extends React.Component {
     constructor(props) {
         super(props);
-        console.log('ViewBlog:Constructor:Showing the Blog....'+JSON.stringify(props));
         const { match : {params}} = this.props;
         if (this.props.blog) {
             this.state = {
@@ -22,25 +21,17 @@ class ViewBlog extends React.Component {
                 id: params.id
             }
         }
-        // this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
-        // const { match : {params}} = this.props;
-        // alert('ViewBlog:this.props'+JSON.stringify(this.props));
-        // alert('ViewBlog:params.id'+JSON.stringify(this.state));
-        // if(this.props.blog === undefined && store.getState().auth.auth && store.getState().auth.auth.loginSuccessful) {
-        console.log('ViewBlog:compDidMount:this.props'+JSON.stringify(this.state));
         if (!this.state.blog) {
-            // alert('ViewBlog:compDidMount:Calling fetchBlogFromServer.................')
             fetchBlogFromServer(this.state.id);
         }
-        // }
-        
     }
     render () {
-        // console.log('store.getState():'+JSON.stringify(store.getState()));
-        // alert('ViewBlog... render called now.....store.getState():'+JSON.stringify(store.getState().comments));
+    		if(this.props.blog) { 
+    			console.log("ViewBlog:render:this.props.blog.comments"+JSON.stringify(this.props.blog.comments));
+    		}
         if (this.props.blog) {
             return (
                 <div className='row'>
@@ -105,7 +96,6 @@ class ViewBlog extends React.Component {
 }
 
 function mapStateToProps(state) {
-    // alert('ViewBlog:mapStateToProps:state.blog: '+JSON.stringify(state));
     return state.blogs
 }
 

@@ -26,3 +26,4 @@ export const PROFILE_UPDATE_FAILED = 'User Profile Update Failed';
 export const PROFILE_UPDATED = 'User Profile Updated Successfully';
 export const BLOG_UPDATED = "Blog Updated Successfully";
 export const TOKEN_AUTHENTICATION_FAILED = "Token Authentication Failed";
+export const USER_RETRIEVAL_FAILED = "Unable to retrieve User data";

@@ -26,6 +26,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Request;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -231,11 +232,10 @@ public class UserResource {
 		return new ResponseEntity<User>(user, HttpStatus.ACCEPTED);
 	}
 
-	@PostMapping("/get/{userId}")
-	public ResponseEntity<User> get(@PathVariable("userId") String userId, @RequestBody String token) {
+	@GetMapping("/get/{userId}")
+	public ResponseEntity<User> get(@PathVariable("userId") String userId) {
 		// register the user with the site
 		User user = userService.getUser(userId);
-		//		user.setToken(token);
 		User userToReturn = new User(user);
 		userToReturn.setPassword("");
 		return new ResponseEntity<User>(user, HttpStatus.ACCEPTED);

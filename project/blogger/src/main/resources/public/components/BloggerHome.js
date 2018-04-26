@@ -1,5 +1,5 @@
 import React from 'react';
-import { fetchBlogsFromServer, fetchBlogsForUserFromServer } from "../actions/Actions.js";
+import { fetchBlogsFromServer, fetchBlogsForUserFromServer, searchBlogs } from "../actions/Actions.js";
 import Blog from './Blog.js';
 import store from '../store/blogger_store.js';
 import { connect } from 'react-redux';
@@ -7,33 +7,40 @@ import * as BloggerActions from '../actions/Actions.js';
 import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
 import { NavLink } from 'react-router-dom';
-// import { NavLinkButton } from '../widgets/NavLinkButton.js';
 
 class BloggerHome extends React.Component {
     constructor(props) {
         super(props);
-        // alert('BloggerHome: props;'+JSON.stringify(props));
-        this.state={
-
+        this.state = {
+            searchCriteria: {
+                searchBasedOn: "Title",
+                searchString: {},
+                blogCategory: "All"
+            }
         }
+        this.onChange = this.onChange.bind(this);
+        this.submit = this.submit.bind(this);
+    }
+
+    onChange(event) {
+        this.state.searchCriteria[event.target.name] = event.target.value;
+    }
+
+    submit() {
+        // get the blogs from server based on search criteria
+        searchBlogs(this.state.searchCriteria);
     }
 
     componentDidMount() {
-        store.subscribe( () => this.forceUpdate() );
+        // store.subscribe( () => this.forceUpdate() );
         const currState = store.getState();
-        // alert('BloggerHome; currState:'+JSON.stringify(currState));
         if (currState.user.user) {
-            // alert('BloggerHome; store.calling Action.fetchBlogsForUserFromServer:userId is:'+JSON.stringify(currState.user.user.userId));
             fetchBlogsForUserFromServer(currState.user.user.userId);
-            // store.dispatch(blogList);
         } else {
-            // alert('BloggerHome; calling fetchAllBlogs From Server:currState:'+JSON.stringify(currState));
             fetchBlogsFromServer();
-            // store.dispatch(blogList);
         }
     }
     render() {
-        // alert('BloggerHome: props;'+JSON.stringify(this.props));
         return (
 			<div className="col-xs-12 col-lg-12">
 
@@ -42,11 +49,11 @@ class BloggerHome extends React.Component {
                         <div className="row" >
                             <div className="col-xs-8 padding-left-blogger" >
                             <div className="col-xs-11 zero-padding">
-                            <input type="text" className="form-control" placeholder="Search Blog.." id="searchContentId" />
+                            <input type="text" className="form-control" name="searchString" placeholder="Search Blog.." id="searchContentId" onChange={this.onChange} />
                             </div>
                             <div className="col-xs-1 zero-padding">
                             <span className="input-group-btn">
-                                <button className="btn btn-default" type="button" id="searchBtn">
+                                <button className="btn btn-default" type="button" id="searchBtn" onClick={this.submit}>
                                     <span className="glyphicon glyphicon-search"></span>
                                 </button>
                             </span>
@@ -57,7 +64,7 @@ class BloggerHome extends React.Component {
                             <label className="search-bar-label">for</label>
                             </div>
                             <div className="col-xs-10 blogger-padding-left-right-ten">
-                            <select className="form-control" id="searchTypeId">
+                            <select className="form-control" id="searchTypeId" name="searchBasedOn" onChange={this.onChange}>
                                 <option value="Title">Title</option>
                                 <option value="Author">Author</option>
                                 <option value="Content">Content</option>
@@ -69,7 +76,7 @@ class BloggerHome extends React.Component {
                             <label className="search-bar-label">in</label>
                             </div>
                             <div className="col-xs-10 padding-left-right-blogger">
-                            <select className="form-control">
+                            <select className="form-control" name="blogCategory" onChange={this.onChange}>
                                 <option value="All">All</option>
                                 <option value="Personal Care">Personal Care</option>
                                 <option value="Life Science">Life Science</option>
@@ -85,7 +92,6 @@ class BloggerHome extends React.Component {
                         </div>
                     </div>
                 </div>
-                {/* style={{backgroundColor: 'lightblue'}} */}
                 <div className="container-fluid panel" >
                     <div className="row">
                         <div id="addBlogDivId">
@@ -94,13 +100,6 @@ class BloggerHome extends React.Component {
                                 </div>
                                 <div className="col-lg-2" >
                                     <NavLink to={`/blog/create`} ><button className="btn-sm btn-primary" id="createBlogBtn">Create Blog Now !</button></NavLink>
-
-                                    {/* <button className="btn-sm btn-primary" id="createBlogBtn" onClick={()=> {this.props.history.replace('/blog/create')}}>
-                                        Create Blog Now!
-                                    </button> */}
-                                    {/* <NavLinkButton /> */}
-                                {/* <button className="btn btn-success" as={NavLink} to={`/blog/create`}  style={{backgroundColor: 'dodgerblue'}}>Create a Blog Now! </button> */}
-                                {/* <NavLink to={`/blog/create`}>Create Blog</NavLink> */}
                             </div>
                         </div>
                     </div>
@@ -131,7 +130,6 @@ class BloggerHome extends React.Component {
 };
 
 function mapStateToProps(state) {
-    // alert('Blogger:mapStateToProps:state.blogs: '+JSON.stringify(state.blogs));
     return state.blogs;
     
 }

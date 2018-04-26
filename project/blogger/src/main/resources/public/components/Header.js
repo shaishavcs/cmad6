@@ -1,7 +1,7 @@
 import React from 'react';
 // import { Container, Row, Col } from 'reactstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/css/bootstrap.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.css';
 import { NavLink } from 'react-router-dom';
 import store from '../store/blogger_store.js';
 import { connect } from 'react-redux';
@@ -9,43 +9,27 @@ import { logout } from '../actions/Actions.js';
 import * as BloggerActions from '../actions/Actions.js';
 import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
-// import Redirect from 'react-router-dom';
 
 class Header extends React.Component {
 
     constructor(props) {
         super(props);
-        // alert("Header: constructor:props:"+JSON.stringify(props));
-        // this.state = {
-        //     isOpen: false,
-        //     // initialValues: props.initialValues,
-        //     // loginSuccessful: props.user.loginSuccessful,
-        //     // user: props.user.user
-        // };
         this.logoutSelected = this.logoutSelected.bind(this);
-        // this.toggle = this.toggle.bind(this);
     }
-    // toggle() {
-    //     this.setState({
-    //       isOpen: !this.state.isOpen
-    //     });
-    // }
     
     logoutSelected() {
         console.log('logoout action started: confirming from user first:');
         if(confirm('Are you sure you want to logout?')) {
             console.log('logout action started: got user confirmation:this.props.user.userId'+JSON.stringify(this.props.user.user.userId));
-            logout(this.props.user.user.userId);
+            // logout(this.props.user.user.userId);
         }
+        BrowserHistory.push("/");
         // window.location.replace('/');
         // make server call and logout
     }
     render () {
         // alert('Header:render:this.props?:'+JSON.stringify(this.props));
-        const isUserLoggedIn = this.props.user && this.props.user.user && this.props.auth && this.props.auth.auth && this.props.auth.auth.loginSuccessful;
-        // alert('Header:render:isUserLoggedIn?:'+JSON.stringify(isUserLoggedIn));
-        // alert('Header:render:this.props.loginSuccessful?:'+JSON.stringify(this.props.user.loginSuccessful));
-        // alert('Header:render:this.props.user.loginSuccessful?:'+JSON.stringify(this.props.user));
+        const isUserLoggedIn = this.props.user && this.props.user.user && this.props.auth && this.props.auth.auth && this.props.auth.auth.token && this.props.auth.auth.loginSuccessful;
 
         return (
             <div>
@@ -79,8 +63,8 @@ class Header extends React.Component {
                             <ul className="nav navbar-nav navbar-right">
                                 {/* <li><NavLink to="/logout"><span className="glyphicon glyphicon-log-out"></span> Logout</NavLink></li> */}
                                 <li className="dropdown">
-                                    <a className="dropdown-toggle" data-toggle="dropdown" href="#">{this.props.user.user.firstName}
-                                    <span className="caret"></span></a>
+                                    <a className="dropdown-toggle" data-toggle="dropdown" href="#">{this.props.user.user.firstName}  
+                                    <span className="caret"></span> &nbsp;&nbsp;&nbsp;  </a>
                                     <ul className="dropdown-menu">
                                     <li><NavLink to="/editProfile">Edit Profile</NavLink></li>
                                     <li><NavLink to="/changePassword">Change Password</NavLink></li>

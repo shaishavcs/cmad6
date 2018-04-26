@@ -10,15 +10,7 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class })
 public class BloggerApplication extends SpringBootServletInitializer {
-	//
-	// @Bean
-	// public FilterRegistrationBean jwtFilter() {
-	// final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-	// registrationBean.setFilter(new JwtFilter());
-	// registrationBean.addUrlPatterns("/**");
-	//
-	// return registrationBean;
-	// }
+
 	@Override
 	public SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 		return application.sources(BloggerApplication.class);

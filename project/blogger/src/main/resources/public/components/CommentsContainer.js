@@ -25,7 +25,6 @@ class CommentsContainer extends React.Component {
     }
 
     onChangeContent(event) {
-        // console.log("CommentCreating:"+event.target.value);
         const field = event.target.name;
         const comment = this.state.comment;
         comment[field] = event.target.value;
@@ -37,39 +36,23 @@ class CommentsContainer extends React.Component {
         });
     }
     handleSubmit() {
-        // console.log('Submitting Comment update request....state.comment?::: '+JSON.stringify(this.state.comment));
         const creationDate = new Date(),
         date = creationDate.getFullYear() + '-' + (creationDate.getMonth() + 1) + '-' + creationDate.getDate();
         let comment = this.state.comment;
         comment.postedDate = creationDate;
-        console.log('Submitting Comment update request....state.comment?::: '+JSON.stringify(comment));
-        // if (this.state.edit) {
-        //     editComment(comment);
-        // } else {
         createComment(comment, this.state.blog.id);
-        // }
     }
-
-    // postCommentClickHandler() {
-    //     return this.setState({
-    //         comments: this.state.comments,
-    //         blog: this.state.blog,
-    //         showCreateComment: !showCreateComment 
-    //     });
-    // }
 
     render () {
         let userLoggedIn = true;
         if (store.getState().user && store.getState().user.user && store.getState().auth && store.getState().auth.auth && store.getState().auth.auth.token) {
-            console.log('EditBlog: checking auth.auth.loginSuccessful...');
             if (store.getState().auth.auth.loginSuccessful === false) {
-                console.log('EditBlog: login failed... redirescting to login...');
                 userLoggedIn = false;
             }
         } else if ((store.getState().user.user === undefined && store.getState().auth.auth === undefined ) || store.getState().auth.auth.loginSuccessful === false) {
             userLoggedIn = false;
         }
-
+        
         return (
             <div className='row'>
                 {this.state.blog ?
@@ -78,16 +61,11 @@ class CommentsContainer extends React.Component {
                         <hr />
                         {userLoggedIn ?
                         <div className="col-lg-2">
-                            {/* <NavLink to={`/blog/modify/${ this.props.blog.id }`} blog={undefined}><button className="btn btn-primary">Post a Comment</button></NavLink> */}
-                            {/* <button className="btn-xs btn-success" onClick={() => this.setState({ comment: this.state.comment, comments:this.state.comments, blog:this.state.blog,showCreateComment: !this.state.showCreateComment })} >Post a Comment</button> */}
                             <h4>Post a Comment</h4>
 
                         </div>
                         :
                         <div className="col-lg-2">
-                            {/* <NavLink to={`/blog/modify/${ this.props.blog.id }`} blog={undefined}><button className="btn btn-primary">Post a Comment</button></NavLink> */}
-                            {/* <button className="btn-xs btn-success" onClick={() => this.setState({ comment: this.state.comment, comments:this.state.comments, blog:this.state.blog,showCreateComment: !this.state.showCreateComment })} >Post a Comment</button> */}
-                            {/* <h4>Post a Comment</h4><NavLink to='/login'>Login Now</NavLink> */}
                             <NavLink to='/login'><button className="btn-sm btn-success" >Login to Post a Comment</button></NavLink>
                         </div>
                         
@@ -106,7 +84,7 @@ class CommentsContainer extends React.Component {
                 }
                 <div className="row" />
                 <div className="panel">
-                    <h4 style={{backgroundColor: 'lightgrey'}}>Comments {Object.keys(this.props.comments).length}</h4>
+                    <h5 style={{backgroundColor: 'lightgrey'}}>Comments {Object.keys(this.props.comments).length}</h5>
                 </div>
             {Object.keys(this.props.comments).length > 0 ?
                 <div className="panel">

@@ -14,7 +14,7 @@ class Login extends React.Component {
         this.onSave = this.onSave.bind(this);
     }
     componentWillMount() {
-        if (store.getState().auth) {
+        if (store.getState().auth && store.getState().auth.auth &&  store.getState().auth.auth.loginSuccessful) {
             store.getState().auth.auth.loginSuccessful = true;
         }
         console.log('componentDidMount:store.auth.auth:'+JSON.stringify(store.getState().auth));
@@ -50,19 +50,23 @@ class Login extends React.Component {
         //         alert('Login : store.getState().auth.auth.loginSuccessful;'+JSON.stringify(store.getState().auth.auth.loginSuccessful));
         //     }
         // }
-        console.log('state.user:'+JSON.stringify(store.getState().user));
-        console.log('state.auth:'+JSON.stringify(store.getState().auth));
-        console.log('state.auth:'+JSON.stringify(store.getState().auth.auth));
+        // console.log('Login:state.error:'+JSON.stringify(store.getState().error));
+        // console.log('Login:state.user:'+JSON.stringify(store.getState().user));
+        // console.log('Login:state.auth:'+JSON.stringify(store.getState().auth));
+        // console.log('Login:state.auth:'+JSON.stringify(store.getState().auth.auth));
         let isThereError = false;
         if (store.getState().user && store.getState().user.user && store.getState().auth && store.getState().auth.auth && store.getState().auth.auth.token) {
             if (store.getState().auth.auth.loginSuccessful && store.getState().auth.auth.token && store.getState().auth.auth.token !== null) {
                 return (<Redirect to='/'/>)
             } 
-        } else if (store.getState().auth.auth.loginSuccessful === false) {
-            // console.log('login:render: store.getState()')
+        } else if (store.getState().auth && store.getState().auth.auth && store.getState().auth.auth.loginSuccessful && store.getState().auth.auth.loginSuccessful === false) {
             isThereError = true;
         }
-        return(
+        if (store.getState().error.loginFailed) {
+            isThereError = true;
+        }
+            // console.log('login:render: store.getState()')
+            return(
             <div className='row'>
                 <div className="container col-lg-offset-1">
                     <h2>Login</h2>

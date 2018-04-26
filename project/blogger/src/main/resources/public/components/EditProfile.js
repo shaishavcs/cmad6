@@ -7,11 +7,11 @@ import store from '../store/blogger_store.js';
 class EditProfile extends React.Component {
     constructor(props) {
         super(props);
-        console.log("EditProfile:store.getState().user.user:"+JSON.stringify(store.getState().user.user));
         this.state = {
             user: store.getState().user.user,
             errorMessage: ' ',
-            requiredFieldsEntered: true 
+            requiredFieldsEntered: true ,
+            profileUpdated: store.getState().user.profileUpdated
         }
         this.onChange = this.onChange.bind(this);
         this.handleSubmitButtonEnabling = this.handleSubmitButtonEnabling.bind(this);
@@ -19,9 +19,6 @@ class EditProfile extends React.Component {
     }
 
     onChange(event) {
-        // console.log('onChange:event.target.name is:'+event.target.name);
-        // console.log('onChange:event.target.value is:'+event.target.value);
-        console.log('onChange:event.target.value is:'+event.target.value);
         const field = event.target.name;
         const user = this.state.user;
         user[field] = event.target.value;
@@ -30,7 +27,6 @@ class EditProfile extends React.Component {
             requiredFieldsEntered: this.state.requiredFieldsEntered
         });
         this.handleSubmitButtonEnabling();
-        console.log('onChange:event.target.value is:'+JSON.stringify(this.state));
         return this.state;
     }
     handleSubmitButtonEnabling() {
@@ -48,7 +44,6 @@ class EditProfile extends React.Component {
     }
 
     save() {
-        console.log('Submitting Profile changes.......'+this.state.user);
         this.state.user["token"] = '';
         updateProfile(this.state.user, this.state.user.userId);
     }
@@ -60,7 +55,6 @@ class EditProfile extends React.Component {
         const alternateEmailId = this.state.user.alternateEmailId? this.state.user.alternateEmailId:'';
         const phoneNumber = this.state.user.phoneNumber? this.state.user.phoneNumber:'';
         const disabledBtn = !this.state.requiredFieldsEntered;
-
         return (
             <div id="updateProfileDivId" className="col-sm-12 col-lg-12 col-xs-12 col-md-12">
             <div className="container col-lg-offset-1">

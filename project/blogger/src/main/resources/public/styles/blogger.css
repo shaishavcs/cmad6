@@ -1,4 +1,6 @@
 @import '../node_modules/megadraft/dist/css/megadraft.css';
+@import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+@import '../node_modules/bootstrap/dist/css/bootstrap.css';
 
 .panel-height{
     height:inherit;

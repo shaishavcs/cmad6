@@ -34,7 +34,6 @@ class CreateEditComment extends React.Component {
         });
     }
     handleSubmit() {
-        console.log('Submitting Comment update request....state.comment?::: '+JSON.stringify(this.state.comment));
         const creationDate = new Date(),
         date = creationDate.getFullYear() + '-' + (creationDate.getMonth() + 1) + '-' + creationDate.getDate();
         let comment = this.state.comment;
@@ -61,7 +60,6 @@ class CreateEditComment extends React.Component {
         )
     };
 }
-{/* <TextInput style={styles.textInput} /> */}
 
 const commentedByStyle = {
   color: 'DodgerBlue',

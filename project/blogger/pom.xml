@@ -5,9 +5,9 @@
 
 	<groupId>com.cmad.essentials</groupId>
 	<artifactId>blogger</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<!-- <version>0.0.1-SNAPSHOT</version> -->
 	<packaging>war</packaging>
-	
+
 	<name>blogger</name>
 	<description>Blogger project with Spring Boot and MongoDB</description>
 
@@ -15,7 +15,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.5.10.RELEASE</version>
-		<relativePath /> <!-- lookup parent from repository -->
+		<!-- <relativePath /> --> <!-- lookup parent from repository -->
 	</parent>
 
 	<properties>
@@ -36,16 +36,6 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!-- <dependency> <groupId>io.springfox</groupId> <artifactId>springfox-swagger-ui</artifactId> 
-			<version>2.6.1</version> <scope>compile</scope> </dependency> <dependency> 
-			<groupId>io.springfox</groupId> <artifactId>springfox-swagger2</artifactId> 
-			<version>2.6.1</version> <scope>compile</scope> </dependency> -->
-<!-- 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>4.2.1.Final</version>
-		</dependency>
- -->
 		<dependency>
 			<groupId>org.springframework.security.oauth</groupId>
 			<artifactId>spring-security-oauth2</artifactId>
@@ -54,11 +44,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-autoconfigure</artifactId>
 		</dependency>
-		<!-- <dependency> <groupId>org.hibernate</groupId> <artifactId>hibernate-core</artifactId> 
-			</dependency> <dependency> <groupId>org.hibernate.javax.persistence</groupId> 
-			<artifactId>hibernate-jpa-2.1-api</artifactId> <version>1.0.0.Final</version> 
-			</dependency> -->		<!-- <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-data-jpa</artifactId> 
-			</dependency> -->
 		<dependency>
 			<groupId>antlr</groupId>
 			<artifactId>antlr</artifactId>
@@ -71,8 +56,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jersey</artifactId>
 		</dependency>
-		<dependency> <groupId>io.jsonwebtoken</groupId> <artifactId>jjwt</artifactId> 
-			<version>0.9.0</version> </dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.0</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-jwt</artifactId>
@@ -81,11 +69,7 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
-<!-- 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
- -->		<dependency>
+		<dependency>
 			<groupId>org.mongodb</groupId>
 			<artifactId>mongo-java-driver</artifactId>
 		</dependency>
@@ -95,59 +79,93 @@
 			<version>1.3.0</version>
 		</dependency>
 		<dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-	        	<groupId>junit</groupId>
-	        	<artifactId>junit</artifactId>
-	        	<version>4.12</version>
-        </dependency>
-		<!-- <dependency> <groupId>org.hibernate.ogm</groupId> <artifactId>hibernate-ogm-mongodb</artifactId> 
-			<version>4.0.0.Beta1</version> </dependency> -->
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
 			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<warName>blogger</warName>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			<!-- <plugin> <groupId>com.github.kongchen</groupId> <artifactId>swagger-maven-plugin</artifactId> 
-				<version>3.1.3</version> <configuration> <apiSources> <apiSource> <springmvc>false</springmvc> 
-				<locations>some.package</locations> <basePath>/api</basePath> <info> <title>Put 
-				your REST service's name here</title> <description>Add some description</description> 
-				<version>v1</version> </info> <swaggerDirectory>${project.build.directory}/api</swaggerDirectory> 
-				<attachSwaggerArtifact>true</attachSwaggerArtifact> </apiSource> </apiSources> 
-				</configuration> <executions> <execution> <phase>${phase.generate-documentation}</phase> 
-				fx process-classes phase <goals> <goal>generate</goal> </goals> </execution> 
-				</executions> </plugin> <plugin> <groupId>io.github.robwin</groupId> <artifactId>swagger2markup-maven-plugin</artifactId> 
-				<version>0.9.3</version> <configuration> <inputDirectory>${project.build.directory}/api</inputDirectory> 
-				<outputDirectory>${generated.asciidoc.directory}</outputDirectory> specify 
-				location to place asciidoc files <markupLanguage>asciidoc</markupLanguage> 
-				</configuration> <executions> <execution> <phase>${phase.generate-documentation}</phase> 
-				<goals> <goal>process-swagger</goal> </goals> </execution> </executions> 
-				</plugin> <plugin> <groupId>org.asciidoctor</groupId> <artifactId>asciidoctor-maven-plugin</artifactId> 
-				<version>1.5.3</version> <dependencies> <dependency> <groupId>org.asciidoctor</groupId> 
-				<artifactId>asciidoctorj-pdf</artifactId> <version>1.5.0-alpha.11</version> 
-				</dependency> <dependency> <groupId>org.jruby</groupId> <artifactId>jruby-complete</artifactId> 
-				<version>1.7.21</version> </dependency> </dependencies> <configuration> <sourceDirectory>${asciidoctor.input.directory}</sourceDirectory> 
-				You will need to create an .adoc file. This is the input to this plugin <sourceDocumentName>swagger.adoc</sourceDocumentName> 
-				<attributes> <doctype>book</doctype> <toc>left</toc> <toclevels>2</toclevels> 
-				<generated>${generated.asciidoc.directory}</generated> this path is referenced 
-				in swagger.adoc file. The given file will simply point to the previously 
-				create adoc files/assemble them. </attributes> </configuration> <executions> 
-				<execution> <id>asciidoc-to-html</id> <phase>${phase.generate-documentation}</phase> 
-				<goals> <goal>process-asciidoc</goal> </goals> <configuration> <backend>html5</backend> 
-				<outputDirectory>${generated.html.directory}</outputDirectory> specify location 
-				to place html file </configuration> </execution> <execution> <id>asciidoc-to-pdf</id> 
-				<phase>${phase.generate-documentation}</phase> <goals> <goal>process-asciidoc</goal> 
-				</goals> <configuration> <backend>pdf</backend> <outputDirectory>${generated.pdf.directory}</outputDirectory> 
-				specify location to place pdf file </configuration> </execution> </executions> 
-				</plugin> -->
+			<plugin>
+				<groupId>com.github.eirslett</groupId>
+				<artifactId>frontend-maven-plugin</artifactId>
+				<version>1.4</version>
+				<executions>
+					<execution>
+						<id>Install node and npm locally to the project</id>
+						<goals>
+							<goal>install-node-and-npm</goal>
+						</goals>
+						<configuration>
+							<nodeVersion>v8.0.0</nodeVersion>
+							<npmVersion>5.3.0</npmVersion>
+							<arguments>install</arguments>
+							<workingDirectory>${basedir}/src/main/resources/public</workingDirectory>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>npm install</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<configuration>
+							<workingDirectory>${basedir}/src/main/resources/public</workingDirectory>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>Build frontend</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<configuration>
+							<arguments>run prod</arguments>
+							<workingDirectory>${basedir}/src/main/resources/public</workingDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>Copy frontend build to target</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/build/</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/build</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
-
 
 </project>

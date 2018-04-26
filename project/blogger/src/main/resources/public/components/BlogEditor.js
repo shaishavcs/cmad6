@@ -20,10 +20,6 @@ export default class BlogEditor extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.handleSubmit = this.props.handleSubmit.bind(this);
 }
-onChange(newState) {
-    console.log('BlogEditor: onChange():'+JSON.stringify(newState));
-    // this.onChangeContent(newState);
-}
 
 onSubmit() {
     // submit the data to parent component
@@ -32,12 +28,8 @@ onSubmit() {
 }
   _handleKeyCommand(command, editorState) {
     const newState = RichUtils.handleKeyCommand(editorState, command);
-    console.log('BlogEditor: _handleKeyCommand newState:'+JSON.stringify(newState));
-    // this.onChangeContent(newState);
     if (newState) {
         this.onChange(newState);
-        console.log('BlogEditor: onChange():'+JSON.stringify(newState));
-        // this.onChangeContent(newState);
         return true;
     }
     return false;
@@ -57,8 +49,6 @@ onSubmit() {
     return getDefaultKeyBinding(e);
   }
   _toggleBlockType(blockType) {
-    console.log('BlogEditor: _toggleBlockType:onChange() being called::this.state.editorState:'+JSON.stringify(this.state.editorState));
-    // this.onChangeContent(newState);
     this.onChange(
       RichUtils.toggleBlockType(
         this.state.editorState,
@@ -67,7 +57,6 @@ onSubmit() {
     );
   }
   _toggleInlineStyle(inlineStyle) {
-    console.log('BlogEditor: _toggleInlineStyle:onChange() being called:this.state.editorState:'+JSON.stringify(this.state.editorState));
     this.onChange(
       RichUtils.toggleInlineStyle(
         this.state.editorState,
@@ -111,7 +100,6 @@ onSubmit() {
     // either style the placeholder or hide it. Let's just hide it now.
     let className = 'RichEditor-editor';
     var contentState = editorState.getCurrentContent();
-    // console.log('BlogEditor: render editor.currentState:'+JSON.stringify(contentState));
     if (!contentState.hasText()) {
       if (contentState.getBlockMap().first().getType() !== 'unstyled') {
         className += ' RichEditor-hidePlaceholder';
@@ -133,11 +121,6 @@ onSubmit() {
         />
         <div className={className} onClick={this.focus} style={styles.root}>
           <Editor
-                //   customStyleMap={colorStyleMap}
-                //   editorState={editorState}
-                //   onChange={this.onChange}
-                //   placeholder="Write something colorful..."
-                //   ref={(ref) => this.editor = ref}
             blockStyleFn={getBlockStyle}
             customStyleMap={styleMap}
             editorState={editorState}
@@ -251,28 +234,6 @@ class StyleButton extends React.Component {
     );
   }
 }
-// class StyleButton extends React.Component {
-//     constructor(props) {
-//       super(props);
-//       this.onToggle = (e) => {
-//         e.preventDefault();
-//         this.props.onToggle(this.props.style);
-//       };
-//     }
-//     render() {
-//       let style;
-//       if (this.props.active) {
-//           style = { ...styles.styleButton, ...colorStyleMap[this.props.style]};
-//       } else {
-//         style = styles.styleButton;
-//       }
-//       return (
-//         <span style={style} onMouseDown={this.onToggle}>
-//           {this.props.label}
-//         </span>
-//       );
-//     }
-//   }
 
 const BLOCK_TYPES = [
   {label: 'H1', style: 'header-one'},

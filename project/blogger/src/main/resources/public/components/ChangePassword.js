@@ -10,12 +10,15 @@ class ChangePassword extends React.Component {
 
     constructor(props) {
         super(props);
+        console.log('changePassword: props:'+JSON.stringify(props));
+        console.log('changePassword: store.state:'+JSON.stringify(store.getState().user));
         if (store.getState().user && store.getState().user.user) {
+            console.log('changePassword: constructor:user present in store:props.'+JSON.stringify(props.user.user));
             this.state = {
-                user: store.getState().user.user,
-                existingPassword: store.getState().user.user.password,
+                user: this.props.user.user,
+                existingPassword: this.props.user.user.password,
                 changePassword: {
-                    currentPassword: store.getState().user.user.password,
+                    currentPassword: this.props.user.user.password,
                     newPassword: '',
                     repeatPassword: '',
                 },
@@ -27,14 +30,28 @@ class ChangePassword extends React.Component {
                 redirect: true
             }
         }
+        console.log('changePassword: constructor:state set:'+JSON.stringify(this.state));
         this.onChange = this.onChange.bind(this);
         this.onSave = this.onSave.bind(this);
         this.handleSubmitButtonEnabling = this.handleSubmitButtonEnabling.bind(this);
     }
+    componentWillReceiveProps(nextProps) {
+        console.log('ChangePassword: componentWillReceiveProps:'+nextProps);
+        if (nextProps.user) {
+            this.setState( {
+                user: this.props.user.user,
+                existingPassword: this.props.user.user.password,
+                changePassword: {
+                    currentPassword: this.props.user.user.password,
+                    newPassword: '',
+                    repeatPassword: '',
+                },
+                errorMessage: ' ',
+                requiredFieldsEntered: false
+            })
+        }
+    }
     onChange(event) {
-        // console.log('onChange:event.target.name is:'+event.target.name);
-        // console.log('onChange:event.target.value is:'+event.target.value);
-        // console.log('onChange:event.target.value is:'+event.target.value);
         const field = event.target.name;
         const changePasswordState = this.state.changePassword;
         changePasswordState[field] = event.target.value;
@@ -45,17 +62,11 @@ class ChangePassword extends React.Component {
             requiredFieldsEntered: this.state.requiredFieldsEntered
         });
         this.handleSubmitButtonEnabling();
-        // console.log('onChange:event.target.value is:'+JSON.stringify(this.state));
         return this.state;
     }
 
     handleSubmitButtonEnabling() {
         let errorMessageToSet = '';
-        // check if the 2 passwords entered do not match
-        // if ((this.state.changePassword.currentPassword) && (this.state.changePassword.currentPassword !== this.state.existingPassword)) {
-        //     errorMessageToSet = "The current password is invalid";
-        // } else 
-        // console.log('this.state.changePassword:'+JSON.stringify(this.state.changePassword));
         if ((this.state.changePassword.newPassword && this.state.changePassword.repeatPassword) && (this.state.changePassword.newPassword !== this.state.changePassword.repeatPassword)) {
             errorMessageToSet = "The new passwords do not match";
         } else 
@@ -64,14 +75,12 @@ class ChangePassword extends React.Component {
         } else {
                 errorMessageToSet = undefined;
         }
-        // console.log('handleSubmitButtonEnabling:errorMessageToSet:'+errorMessageToSet);
         let allFieldsSet = false;
         if (!this.state.changePassword.newPassword || !this.state.changePassword.currentPassword || !this.state.changePassword.repeatPassword) {
             allFieldsSet = false;
         } else {
             allFieldsSet = !errorMessageToSet;
         }
-        // console.log('handleSubmitButtonEnabling:errorMessageToSet:'+errorMessageToSet+' and allFieldsSet?:'+allFieldsSet);
         this.setState({
             user: this.state.user,
             changePassword: this.state.changePassword,
@@ -81,25 +90,23 @@ class ChangePassword extends React.Component {
         });
     }
     onSave(event) {
-        alert('onSave:event is:'+JSON.stringify(this.state.user));
-
-        if (this.state.user.password)
-        event.preventDefault();
-        changePassword(this.state.user.userId, this.state.changePassword);
+        if (this.state.user.password) {
+            event.preventDefault();
+            changePassword(this.state.user.userId, this.state.changePassword);
+        }
     }
 
     render() {
-        console.log('ChangePassword: render:this props:'+JSON.stringify(this.props));
-        console.log('ChangePassword: render:this props:'+JSON.stringify(this.props));
+        console.log('changePassword:render:this.state?'+JSON.stringify(this.state.redirect))
+        console.log('changePassword:render:this.props.user?'+JSON.stringify(this.props.user))
         if (this.state && this.state.redirect) {
             return (<Redirect to="/login" />);
-            // return (<div>Your login has expired.<NavLink to="/editProfile"><button>Click to Login</button></NavLink></div>);
         }
         if (!this.props.user) {
             return (<Redirect to="/login" />);
         }
         let errorMessageToDisplay = this.state.errorMessage;
-        if (this.props.user && this.props.user.currentPasswordMismatch) {
+        if (this.props.user && this.props.error.currentPasswordMismatch) {
             errorMessageToDisplay = 'The current password is invalid';
         } else if (this.props.user.profileUpdated && this.props.user.profileUpdated == true) {
             return (<Redirect to="/login" />);
@@ -146,7 +153,7 @@ class ChangePassword extends React.Component {
                             <button className="btn btn-info" id="cancelBtnId" onClick={()=> {this.props.history.replace('/')}}>Cancel</button>
                         </div>
                         <div className="col-sm-6 col-lg-2 panel">
-                            <button type="button" disabled={!this.state.requiredFieldsEntered} className="btn btn-primary" onClick={this.onSave}>Update</button>
+                            <button type="button" disabled={!this.state.requiredFieldsEntered} className="btn btn-primary" onClick={this.onSave}>Change</button>
                         </div>
                     </div>
                 </div>
@@ -157,7 +164,10 @@ class ChangePassword extends React.Component {
 }
 
 function mapStateToProps(state) {
-    return state.user
+    return {
+        user: state.user,
+        error: state.error
+    }
 }
 
       

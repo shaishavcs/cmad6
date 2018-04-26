@@ -12,7 +12,6 @@ import CollapsiblePreview from './CollapsiblePreview.js';
 class EditBlog extends React.Component {
     constructor(props) {
         super(props);
-        // console.log('Editing the Blog....'+JSON.stringify(props));
         const { match : {params}} = this.props;
         if (this.props.blog) {
             this.state = {
@@ -29,9 +28,6 @@ class EditBlog extends React.Component {
     }
 
     componentDidMount() {
-        // const { match : {params}} = this.props;
-        // alert('EditBlog:this.props'+JSON.stringify(this.props));
-        // alert('EditBlog:params.id'+JSON.stringify(this.state));
         if(this.props.blog === undefined && store.getState().auth.auth && store.getState().auth.auth.loginSuccessful) {
             fetchBlogFromServer(this.state.id);
         }
@@ -46,21 +42,16 @@ class EditBlog extends React.Component {
             blog[field] = event.target.value;
         }
         blog['modifiedDate'] = new Date().getTime();
-        console.log('EditBlog:onChangeContent: blog is:'+JSON.stringify(blog));
         return this.setState({
             blog: blog,
         });
     }
     handleSubmit() {
-        console.log('Submitting Blog update request....state.blog?::: '+JSON.stringify(this.state.blog));
         updateBlog(this.state.blog);
     }
     render () {
-        // console.log('store.getState():'+JSON.stringify(store.getState()));
         if (store.getState().user && store.getState().user.user && store.getState().auth && store.getState().auth.auth && store.getState().auth.auth.token) {
-            // console.log('EditBlog: checking auth.auth.loginSuccessful...');
             if (store.getState().auth.auth.loginSuccessful === false) {
-                console.log('EditBlog: login failed... redirescting to login...');
                 return (<Redirect to='/login'/>)
             }
         } else if ((store.getState().user.user === undefined && store.getState().auth.auth === undefined ) || store.getState().auth.auth.loginSuccessful === false) {
@@ -165,7 +156,6 @@ class EditBlog extends React.Component {
 }
 
 function mapStateToProps(state) {
-    // alert('EditBlog:mapStateToProps:state.blog: '+JSON.stringify(state));
     return state.blogs
 }
 

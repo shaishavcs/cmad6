@@ -31,7 +31,6 @@ class Comment extends React.Component {
         )
     };
 }
-{/* <TextInput style={styles.textInput} /> */}
 
 const commentedByStyle = {
   color: 'DodgerBlue',
